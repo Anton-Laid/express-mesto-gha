@@ -63,28 +63,22 @@ const deleteCard = (req, res) => {
 };
 
 const addLikeCard = (req, res) => {
-  Card.findOneAndUpdate(
-    req.params.cardId,
-    { $addToSet: { likes: req.user._id } },
-    { new: true }
-  )
-    .then((card) => {
-      if (!card) {
-        res
-          .status(ERR_NOT_FOUND)
-          .send({ message: "Карточка c таким id не найдена" });
+  const owner = req.user._id;
+  const { cardId } = req.params.cardId;
 
-        return;
-      }
-      res.status(200).send(like);
-    })
+  Card.findByIdAndUpdate(
+    cardId,
+    { $pull: { likes: owner } },
+    { new: true, runValidators: true }
+  )
+    .then((card) => checkCard(card, res))
     .catch((error) => {
       if (error.name === "CastError") {
-        return res
-          .status(ERR_BAD_REQUEST)
-          .send({ message: "Карточка не найдена" });
+        return res.status(ERROR).send({ message: "Некорректный _id" });
       }
-      res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" });
+      return res
+        .status(ERROR_DEFAULT)
+        .send({ message: "На сервере произошла ошибка" });
     });
 };
 
