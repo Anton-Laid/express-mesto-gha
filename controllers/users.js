@@ -10,9 +10,9 @@ const getUsers = (req, res) => {
     .then((users) => {
       res.status(200).send(users);
     })
-    .catch(() => {
-      res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" });
-    });
+    .catch((error) =>
+      res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" })
+    );
 };
 
 const getUserId = (req, res) => {
@@ -42,9 +42,8 @@ const createUser = (req, res) => {
         return res
           .status(ERR_BAD_REQUEST)
           .send({ messege: "Данные введены не корректно" });
-      } else {
-        res.status(ERR_NOT_FOUND).send({ message: "Ошибка сервера" });
       }
+      res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" });
     });
 };
 
@@ -63,7 +62,7 @@ const updataUser = (req, res) => {
           .status(ERR_BAD_REQUEST)
           .send({ messege: "Данные введены не корректно" });
       }
-      res.status(ERR_NOT_FOUND).send({ message: "Ошибка сервера" });
+      res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" });
     });
 };
 
