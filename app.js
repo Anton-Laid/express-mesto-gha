@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const route = require("./routes/index");
-const { ERR_NOT_FOUND } = require("./errors/errors");
+const { ERR_BAD_REQUEST } = require("./errors/errors");
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -23,7 +23,7 @@ app.use((req, res, next) => {
 app.use(route);
 
 app.use((req, res) => {
-  res.status(ERR_NOT_FOUND).send({ messege: "Страница не найтена" });
+  res.status(ERR_BAD_REQUEST).send({ messege: "Страница не найтена" });
 });
 
 app.listen(PORT, () => {
