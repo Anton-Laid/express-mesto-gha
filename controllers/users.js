@@ -42,8 +42,9 @@ const createUser = (req, res) => {
         return res
           .status(ERR_BAD_REQUEST)
           .send({ messege: "Данные введены не корректно" });
+      } else {
+        res.status(ERR_NOT_FOUND).send({ message: "Ошибка сервера" });
       }
-      res.status(ERR_NOT_FOUND).send({ message: "Ошибка сервера" });
     });
 };
 
