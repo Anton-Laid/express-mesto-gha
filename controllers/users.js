@@ -39,11 +39,11 @@ const createUser = (req, res) => {
     .then((newUser) => res.status(200).send(newUser))
     .catch((error) => {
       if (error.name === "ValidationError") {
-        return res
-          .status(ERR_BAD_REQUEST)
-          .send({ messege: "Данные введены не корректно" });
+        return res.status(ERR_BAD_REQUEST).send({
+          message: "Данные введены некорректно",
+        });
       }
-      res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" });
+      return res.status(ERR_DEFAULT).send({ message: "Что-то пошло не так" });
     });
 };
 
@@ -58,9 +58,9 @@ const updataUser = (req, res) => {
     .then((updateUser) => res.status(200).send(updateUser))
     .catch((error) => {
       if (error.name === "ValidationError") {
-        return res
-          .status(ERR_BAD_REQUEST)
-          .send({ messege: "Данные введены не корректно" });
+        return res.status(ERR_BAD_REQUEST).send({
+          message: "Данные введены некорректно",
+        });
       }
       res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" });
     });
@@ -79,9 +79,9 @@ const updateAvatar = (req, res) => {
     .then((user) => res.status(200).send(user))
     .catch((error) => {
       if (error.name === "ValidationError") {
-        return res
-          .status(ERR_BAD_REQUEST)
-          .send({ messege: "Данные введены не корректно" });
+        return res.status(ERR_BAD_REQUEST).send({
+          message: "Данные введены некорректно",
+        });
       }
       return res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" });
     });

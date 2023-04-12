@@ -62,7 +62,7 @@ const addLikeCard = (req, res) => {
     { new: true }
   )
     .then((like) => {
-      res.status(ERR_BAD_REQUEST).send(like);
+      res.status(200).send(like);
     })
     .catch((error) => {
       if (error.name === "CastError") {
@@ -81,7 +81,7 @@ const removeLikeCard = (req, res) => {
     { new: true }
   )
     .then((like) => {
-      res.status(ERR_BAD_REQUEST).send(like);
+      res.status(200).send(like);
     })
     .catch((error) => {
       if (error.name === "CastError") {
