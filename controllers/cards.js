@@ -43,12 +43,14 @@ const deleteCard = (req, res) => {
 
   Card.findByIdAndRemove(cardId)
     .then((card) => {
-      if (!card) {
-        res.status(ERR_NOT_FOUND).send({ message: "Карточка не найдена" });
+      if (card) {
+        res.status(200).send(card);
 
         return;
       }
-      res.status(200).send(card);
+      res
+        .status(ERR_NOT_FOUND)
+        .send({ message: "Карточка c таким id не найдена" });
     })
     .catch((error) => {
       if (error.name === "CastError") {
@@ -68,7 +70,9 @@ const addLikeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        res.status(ERR_NOT_FOUND).send({ message: "Карточка не найдена" });
+        res
+          .status(ERR_NOT_FOUND)
+          .send({ message: "Карточка c таким id не найдена" });
 
         return;
       }
@@ -92,7 +96,9 @@ const removeLikeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        res.status(ERR_NOT_FOUND).send({ message: "Карточка не найдена" });
+        res
+          .status(ERR_NOT_FOUND)
+          .send({ message: "Карточка c таким id не найдена" });
         return;
       }
       res.status(200).send(card);
@@ -103,7 +109,7 @@ const removeLikeCard = (req, res) => {
           .status(ERR_BAD_REQUEST)
           .send({ message: "Карточка не найдена" });
       }
-      res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" });
+      return res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" });
     });
 };
 
