@@ -7,3 +7,12 @@ module.exports = {
   ERR_DEFAULT,
   ERR_NOT_FOUND,
 };
+
+// .then((card) => {
+//   if (!card)
+//     res
+//       .status(ERR_NOT_FOUND)
+//       .send({ message: "Карточка c таким id не найдена" });
+
+//   res.status(200).send(card);
+// })

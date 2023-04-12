@@ -5,6 +5,15 @@ const {
   ERR_DEFAULT,
 } = require("../errors/errors");
 
+const checkCard = (card, res) => {
+  if (card) {
+    return res.send(card);
+  }
+  return res
+    .status(ERR_NOT_FOUND)
+    .send({ message: "Карточка c таким id не найдена" });
+};
+
 const getCards = (req, res) => {
   Card.find({})
     .then((cards) => res.status(200).send(cards))
@@ -41,17 +50,8 @@ const createCard = (req, res) => {
 const deleteCard = (req, res) => {
   const cardId = req.params.cardId;
 
-  Card.findOneAndDelete(cardId)
-    .then((card) => {
-      if (card) {
-        res.status(200).send(card);
-
-        return;
-      }
-      res
-        .status(ERR_NOT_FOUND)
-        .send({ message: "Карточка c таким id не найдена" });
-    })
+  Card.findByIdAndDelete(cardId)
+    .then((card) => checkCard(card, res))
     .catch((error) => {
       if (error.name === "CastError") {
         return res
@@ -63,39 +63,29 @@ const deleteCard = (req, res) => {
 };
 
 const addLikeCard = (req, res) => {
-  const owner = req.user._id;
-  const { cardId } = req.params.cardId;
-
   Card.findByIdAndUpdate(
-    cardId,
-    { $pull: { likes: owner } },
-    { new: true, runValidators: true }
+    req.params.cardId,
+    { $addToSet: { likes: req.user._id } },
+    { new: true }
   )
     .then((card) => checkCard(card, res))
     .catch((error) => {
       if (error.name === "CastError") {
-        return res.status(ERROR).send({ message: "Некорректный _id" });
+        return res
+          .status(ERR_BAD_REQUEST)
+          .send({ message: "Карточка не найдена " });
       }
-      return res
-        .status(ERROR_DEFAULT)
-        .send({ message: "На сервере произошла ошибка" });
+      return res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" });
     });
 };
 
 const removeLikeCard = (req, res) => {
-  Card.findOneAndDelete(
+  Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } },
     { new: true }
   )
-    .then((card) => {
-      if (card) {
-        return res.status(200).send(card);
-      }
-      return res
-        .status(ERR_NOT_FOUND)
-        .send({ message: "Карточка c таким id не найдена" });
-    })
+    .then((card) => checkCard(card, res))
     .catch((error) => {
       if (error.name === "CastError") {
         return res
