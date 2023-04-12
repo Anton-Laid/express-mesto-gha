@@ -23,7 +23,7 @@ app.use((req, res, next) => {
 app.use(route);
 
 app.use((req, res) => {
-  res.status(ERR_NOT_FOUND).send({ message: "Страница не найтена" });
+  res.status(404).send({ message: "Страница не найтена" });
 });
 
 app.listen(PORT, () => {
