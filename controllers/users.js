@@ -20,6 +20,11 @@ const getUserId = (req, res) => {
 
   User.findById(userId)
     .then((user) => {
+      if (!user) {
+        return res
+          .status(ERR_NOT_FOUND)
+          .send({ message: "Такого пользователя нет" });
+      }
       res.status(200).send(user);
     })
     .catch((error) => {
