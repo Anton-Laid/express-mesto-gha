@@ -32,9 +32,9 @@ const createCard = (req, res) => {
       if (error.name === "ValidationError") {
         return res
           .status(ERR_BAD_REQUEST)
-          .send({ messege: "Данные введены не корректно" });
+          .send({ message: "Данные введены не корректно" });
       }
-      return res.status(ERR_DEFAULT).send({ messege: "Ошибка сервера" });
+      return res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" });
     });
 };
 
@@ -49,9 +49,9 @@ const deleteCard = (req, res) => {
       if (error.name === "CastError") {
         return res
           .status(ERR_BAD_REQUEST)
-          .send({ messege: "Карточка не найдена" });
+          .send({ message: "Карточка не найдена" });
       }
-      res.status(ERR_DEFAULT).send({ messege: "Ошибка сервера" });
+      res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" });
     });
 };
 
@@ -68,9 +68,9 @@ const addLikeCard = (req, res) => {
       if (error.name === "CastError") {
         return res
           .status(ERR_BAD_REQUEST)
-          .send({ messege: "Карточка не найдена" });
+          .send({ message: "Карточка не найдена" });
       }
-      res.status(ERR_DEFAULT).send({ messege: "Ошибка сервера" });
+      res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" });
     });
 };
 
@@ -87,9 +87,9 @@ const removeLikeCard = (req, res) => {
       if (error.name === "CastError") {
         return res
           .status(ERR_BAD_REQUEST)
-          .send({ messege: "Карточка не найдена" });
+          .send({ message: "Карточка не найдена" });
       }
-      res.status(ERR_DEFAULT).send({ messege: "Ошибка сервера" });
+      res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" });
     });
 };
 

@@ -11,7 +11,7 @@ const getUsers = (req, res) => {
       res.status(200).send(users);
     })
     .catch((error) =>
-      res.status(ERR_DEFAULT).send({ messege: "Ошибка сервера" })
+      res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" })
     );
 };
 
@@ -26,9 +26,9 @@ const getUserId = (req, res) => {
       if (error.name === "CastError") {
         return res
           .status(ERR_BAD_REQUEST)
-          .send({ messege: "Такого пользователя нет" });
+          .send({ message: "Такого пользователя нет" });
       }
-      res.status(ERR_DEFAULT).send({ messege: "Ошибка сервера" });
+      res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" });
     });
 };
 
@@ -40,10 +40,10 @@ const createUser = (req, res) => {
     .catch((error) => {
       if (error.name === "ValidationError") {
         return res.status(ERR_BAD_REQUEST).send({
-          messege: "Данные введены не корректно",
+          message: "Данные введены не корректно",
         });
       }
-      return res.status(ERR_DEFAULT).send({ messege: "Что-то пошло не так" });
+      return res.status(ERR_DEFAULT).send({ message: "Что-то пошло не так" });
     });
 };
 
@@ -59,10 +59,10 @@ const updataUser = (req, res) => {
     .catch((error) => {
       if (error.name === "ValidationError") {
         return res.status(ERR_BAD_REQUEST).send({
-          messege: "Данные введены не корректно",
+          message: "Данные введены не корректно",
         });
       }
-      res.status(ERR_DEFAULT).send({ messege: "Ошибка сервера" });
+      res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" });
     });
 };
 
@@ -80,10 +80,10 @@ const updateAvatar = (req, res) => {
     .catch((error) => {
       if (error.name === "ValidationError") {
         return res.status(ERR_BAD_REQUEST).send({
-          messege: "Данные введены не корректно",
+          message: "Данные введены не корректно",
         });
       }
-      return res.status(ERR_DEFAULT).send({ messege: "Ошибка сервера" });
+      return res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" });
     });
 };
 
