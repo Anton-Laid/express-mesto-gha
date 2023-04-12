@@ -44,9 +44,9 @@ const deleteCard = (req, res) => {
   Card.findByIdAndRemove(cardId)
     .then((card) => {
       if (!card) {
-        return res
-          .status(ERR_NOT_FOUND)
-          .send({ message: "Карточка не найдена" });
+        res.status(ERR_NOT_FOUND).send({ message: "Карточка не найдена" });
+
+        return;
       }
       res.status(200).send(card);
     })
@@ -68,9 +68,9 @@ const addLikeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        return res
-          .status(ERR_NOT_FOUND)
-          .send({ message: "Карточка не найдена" });
+        res.status(ERR_NOT_FOUND).send({ message: "Карточка не найдена" });
+
+        return;
       }
       res.status(200).send(like);
     })
@@ -92,9 +92,9 @@ const removeLikeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        return res
-          .status(ERR_NOT_FOUND)
-          .send({ message: "Карточка не найдена" });
+        res.status(ERR_NOT_FOUND).send({ message: "Карточка не найдена" });
+
+        return;
       }
       res.status(200).send(like);
     })

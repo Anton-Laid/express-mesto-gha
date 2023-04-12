@@ -27,5 +27,5 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Start server port:${PORT}`);
+  console.log(`Start server PORT:${PORT}`);
 });
