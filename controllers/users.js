@@ -40,7 +40,7 @@ const createUser = (req, res) => {
     .catch((error) => {
       if (error.name === "ValidationError") {
         return res.status(ERR_BAD_REQUEST).send({
-          message: "Данные введены некорректно",
+          message: "Данные введены не корректно",
         });
       }
       return res.status(ERR_DEFAULT).send({ message: "Что-то пошло не так" });
@@ -59,7 +59,7 @@ const updataUser = (req, res) => {
     .catch((error) => {
       if (error.name === "ValidationError") {
         return res.status(ERR_BAD_REQUEST).send({
-          message: "Данные введены некорректно",
+          message: "Данные введены не корректно",
         });
       }
       res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" });
@@ -80,7 +80,7 @@ const updateAvatar = (req, res) => {
     .catch((error) => {
       if (error.name === "ValidationError") {
         return res.status(ERR_BAD_REQUEST).send({
-          message: "Данные введены некорректно",
+          message: "Данные введены не корректно",
         });
       }
       return res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" });
