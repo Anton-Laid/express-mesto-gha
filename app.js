@@ -2,7 +2,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const route = require("./routes/index");
-const { ERR_NOT_FOUND } = require("./errors/errors");
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -21,10 +20,6 @@ app.use((req, res, next) => {
 });
 
 app.use(route);
-
-app.use((req, res) => {
-  res.status(404).send({ message: "Страница не найтена" });
-});
 
 app.listen(PORT, () => {
   console.log(`Start server PORT:${PORT}`);
