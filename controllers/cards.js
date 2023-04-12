@@ -41,7 +41,7 @@ const createCard = (req, res) => {
 const deleteCard = (req, res) => {
   const cardId = req.params.cardId;
 
-  Card.findByIdAndRemove(cardId)
+  Card.findOneAndDelete(cardId)
     .then((card) => {
       if (card) {
         res.status(200).send(card);
@@ -63,7 +63,7 @@ const deleteCard = (req, res) => {
 };
 
 const addLikeCard = (req, res) => {
-  Card.findByIdAndUpdate(
+  Card.findOneAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
     { new: true }
@@ -89,19 +89,18 @@ const addLikeCard = (req, res) => {
 };
 
 const removeLikeCard = (req, res) => {
-  Card.findByIdAndUpdate(
+  Card.findOneAndDelete(
     req.params.cardId,
     { $pull: { likes: req.user._id } },
     { new: true }
   )
     .then((card) => {
-      if (!card) {
-        res
-          .status(ERR_NOT_FOUND)
-          .send({ message: "Карточка c таким id не найдена" });
-        return;
+      if (card) {
+        return res.status(200).send(card);
       }
-      res.status(200).send(card);
+      return res
+        .status(ERR_NOT_FOUND)
+        .send({ message: "Карточка c таким id не найдена" });
     })
     .catch((error) => {
       if (error.name === "CastError") {
