@@ -11,7 +11,7 @@ const getUsers = (req, res) => {
       res.status(200).send(users);
     })
     .catch((error) =>
-      res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" })
+      res.status(ERR_DEFAULT).send({ message: "На сервере произошла ошибка" })
     );
 };
 
@@ -33,7 +33,7 @@ const getUserId = (req, res) => {
           .status(ERR_BAD_REQUEST)
           .send({ message: "Такого пользователя нет" });
       }
-      res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" });
+      res.status(ERR_DEFAULT).send({ message: "На сервере произошла ошибка" });
     });
 };
 
@@ -48,7 +48,9 @@ const createUser = (req, res) => {
           message: "Данные введены не корректно",
         });
       }
-      return res.status(ERR_DEFAULT).send({ message: "Что-то пошло не так" });
+      return res
+        .status(ERR_DEFAULT)
+        .send({ message: "На сервере произошла ошибка" });
     });
 };
 
@@ -67,7 +69,7 @@ const updataUser = (req, res) => {
           message: "Данные введены не корректно",
         });
       }
-      res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" });
+      res.status(ERR_DEFAULT).send({ message: "На сервере произошла ошибка" });
     });
 };
 
@@ -88,7 +90,9 @@ const updateAvatar = (req, res) => {
           message: "Данные введены не корректно",
         });
       }
-      return res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" });
+      return res
+        .status(ERR_DEFAULT)
+        .send({ message: "На сервере произошла ошибка" });
     });
 };
 

@@ -18,7 +18,7 @@ const getCards = (req, res) => {
   Card.find({})
     .then((cards) => res.status(200).send(cards))
     .catch(() => {
-      res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" });
+      res.status(ERR_DEFAULT).send({ message: "На сервере произошла ошибка" });
     });
 };
 
@@ -43,7 +43,9 @@ const createCard = (req, res) => {
           .status(ERR_BAD_REQUEST)
           .send({ message: "Данные введены не корректно" });
       }
-      return res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" });
+      return res
+        .status(ERR_DEFAULT)
+        .send({ message: "На сервере произошла ошибка" });
     });
 };
 
@@ -58,7 +60,7 @@ const deleteCard = (req, res) => {
           .status(ERR_BAD_REQUEST)
           .send({ message: "Карточка не найдена" });
       }
-      res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" });
+      res.status(ERR_DEFAULT).send({ message: "На сервере произошла ошибка" });
     });
 };
 
@@ -75,7 +77,9 @@ const addLikeCard = (req, res) => {
           .status(ERR_BAD_REQUEST)
           .send({ message: "Карточка не найдена " });
       }
-      return res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" });
+      return res
+        .status(ERR_DEFAULT)
+        .send({ message: "На сервере произошла ошибка" });
     });
 };
 
@@ -92,7 +96,9 @@ const removeLikeCard = (req, res) => {
           .status(ERR_BAD_REQUEST)
           .send({ message: "Карточка не найдена" });
       }
-      return res.status(ERR_DEFAULT).send({ message: "Ошибка сервера" });
+      return res
+        .status(ERR_DEFAULT)
+        .send({ message: "На сервере произошла ошибка" });
     });
 };
 
