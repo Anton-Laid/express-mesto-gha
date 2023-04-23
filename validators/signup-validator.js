@@ -1,5 +1,5 @@
 const { celebrate, Joi } = require("celebrate");
-const { MSG_INVALID_LINK_FORMAT } = require("../utils/constants");
+const { MSG_INVALID_LINK_FORMAT, LINK_PATTERN } = require("../utils/constants");
 const validator = require("validator");
 
 const validateURL = (value) => {
@@ -11,10 +11,10 @@ const validateURL = (value) => {
 
 module.exports.signupValidator = celebrate({
   body: Joi.object().keys({
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string().custom(validateURL),
-    email: Joi.string().required().email().min(2).max(30),
-    password: Joi.string().required().min(2).max(30),
+    avatar: Joi.string().pattern(LINK_PATTERN),
   }),
 });
