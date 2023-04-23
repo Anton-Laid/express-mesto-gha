@@ -14,7 +14,7 @@ module.exports.signupValidator = celebrate({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
     avatar: Joi.string().custom(validateURL),
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
+    email: Joi.string().required().email().min(2).max(30),
+    password: Joi.string().required().min(2).max(30),
   }),
 });
