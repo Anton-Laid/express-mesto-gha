@@ -24,6 +24,12 @@ app.use((req, res, next) => {
   next(new NotFoundError(MSG_PAGE_NOT_FOUND));
 });
 
+app.use((req, res) => {
+  req.user = {
+    _id: "5d8b8592978f8bd833ca8133",
+  };
+});
+
 app.use(errors());
 
 app.use((err, req, res, next) => {
@@ -33,7 +39,6 @@ app.use((err, req, res, next) => {
     message: statusCode === ERROR_SERVER ? MSG_DEFAULT : message,
   });
 });
-
 app.listen(PORT, () => {
   console.log(`Start server PORT:${PORT}`);
 });
