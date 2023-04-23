@@ -2,7 +2,6 @@ const Card = require("../modules/card");
 const errorList = require("../errors/index");
 
 const {
-  STATUS_OK,
   STATUS_CREATED,
   VALIDATION_ERROR,
   MSG_INVALID_CARD_DATA,
@@ -12,7 +11,7 @@ const {
 
 const getCards = (req, res, next) => {
   Card.find({})
-    .then((cards) => res.status(STATUS_OK).send(cards))
+    .then((cards) => res.status(200).send(cards))
     .catch((error) => {
       next(error);
     });
@@ -49,7 +48,7 @@ const deleteCard = (req, res, next) => {
       if (!card) {
         throw new errorList.NotFoundError(MSG_INVALID_CARD_DATA);
       }
-      res.status(STATUS_OK).send(card);
+      res.status(200).send(card);
     })
     .catch((error) => {
       if (error.name === CAST_ERROR) {
@@ -69,7 +68,7 @@ const addLikeCard = (req, res, next) => {
       if (!card) {
         throw new errorList.NotFoundError(MSG_INVALID_CARD_DATA);
       }
-      return res.status(STATUS_OK).send(card);
+      return res.status(200).send(card);
     })
     .catch((error) => {
       if (error.name === CAST_ERROR) {
@@ -89,7 +88,7 @@ const removeLikeCard = (req, res, next) => {
       if (!card) {
         throw new errorList.NotFoundError(MSG_INVALID_CARD_DATA);
       }
-      return res.status(STATUS_OK).send(card);
+      return res.status(200).send(card);
     })
     .catch((error) => {
       if (error.name === CAST_ERROR) {

@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const errorList = require("../errors/index");
 const {
-  STATUS_OK,
   STATUS_CREATED,
   MSG_PROFILE_NOT_FOUND,
   MSG_USER_NOT_FOUND,
@@ -16,7 +15,7 @@ const {
 const getUsers = (req, res, next) => {
   User.find({})
     .then((users) => {
-      res.status(STATUS_OK).send(users);
+      res.status(200).send(users);
     })
     .catch(next);
 };
@@ -29,7 +28,7 @@ const getUserId = (req, res, next) => {
       if (!user) {
         throw new errorList.NotFoundError(MSG_PROFILE_NOT_FOUND);
       }
-      return res.status(STATUS_OK).send(user);
+      return res.status(200).send(user);
     })
     .catch((error) => {
       if (error.name === CAST_ERROR) {
@@ -96,7 +95,7 @@ const updataUser = (req, res, next) => {
       if (!user) {
         throw new errorList.NotFoundError(MSG_PROFILE_NOT_FOUND);
       }
-      return res.status(STATUS_OK).send({ name: user.name, about: user.about });
+      return res.status(200).send({ name: user.name, about: user.about });
     })
     .catch((error) => {
       if (error.name === VALIDATION_ERROR) {
