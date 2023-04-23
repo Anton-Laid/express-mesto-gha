@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(route);
 
 app.use((req, res, next) => {
-  res.status(404).send({ message: "Error" });
+  next(new NotFoundError(MSG_PAGE_NOT_FOUND));
 });
 
 app.use(errors());
