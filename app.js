@@ -20,11 +20,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(route);
 
-app.use(errors());
-
 app.use((req, res, next) => {
   next(new NotFoundError(MSG_PAGE_NOT_FOUND));
 });
+
+app.use(errors());
 
 app.use((err, req, res, next) => {
   const { statusCode = ERROR_SERVER, message } = err;
