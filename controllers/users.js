@@ -1,7 +1,7 @@
 const User = require("../modules/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const errorList = require("../errors/index");
+//const errorList = require("../errors/index");
 const {
   STATUS_CREATED,
   MSG_PROFILE_NOT_FOUND,
@@ -11,6 +11,11 @@ const {
   CAST_ERROR,
   VALIDATION_ERROR,
 } = require("../utils/constants");
+const NotFoundError = require("../errors/NotFoundError");
+const BadRequestError = require("../errors/BadRequestError");
+const UnauthorizedError = require("../errors/UnauthorizedError");
+const ConflictError = require("../errors/ConflictError");
+const ForbiddenError = require("../errors/ForbiddenError");
 
 const getUsers = (req, res, next) => {
   User.find({})
@@ -26,13 +31,13 @@ const getUserId = (req, res, next) => {
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        throw new errorList.NotFoundError(MSG_PROFILE_NOT_FOUND);
+        throw new NotFoundError(MSG_PROFILE_NOT_FOUND);
       }
       return res.status(200).send(user);
     })
     .catch((error) => {
       if (error.name === CAST_ERROR) {
-        return next(new errorList.BadRequestError(MSG_USER_NOT_FOUND));
+        return next(new BadRequestError(MSG_USER_NOT_FOUND));
       }
       next(error);
     });
@@ -74,10 +79,10 @@ const createUsers = (req, res, next) => {
     )
     .catch((err) => {
       if (err.code === 11000) {
-        return next(new errorList.ConflictError(MSG_REGISTERED_USER));
+        return next(new ConflictError(MSG_REGISTERED_USER));
       }
       if (err.name === VALIDATION_ERROR) {
-        return next(new errorList.BadRequestError(MSG_INVALID_USER_DATA));
+        return next(new BadRequestError(MSG_INVALID_USER_DATA));
       }
       return next(err);
     });
@@ -93,13 +98,13 @@ const updataUser = (req, res, next) => {
   )
     .then((user) => {
       if (!user) {
-        throw new errorList.NotFoundError(MSG_PROFILE_NOT_FOUND);
+        throw new NotFoundError(MSG_PROFILE_NOT_FOUND);
       }
       return res.status(200).send({ name: user.name, about: user.about });
     })
     .catch((error) => {
       if (error.name === VALIDATION_ERROR) {
-        next(new errorList.BadRequestError(MSG_UPDATE_USERS_DATA));
+        next(new BadRequestError(MSG_UPDATE_USERS_DATA));
       }
       next(error);
     });
@@ -114,13 +119,13 @@ const updateAvatar = (req, res, next) => {
   )
     .then((user) => {
       if (!user) {
-        throw new errorList.NotFoundError(MSG_PROFILE_NOT_FOUND);
+        throw new NotFoundError(MSG_PROFILE_NOT_FOUND);
       }
       return res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === VALIDATION_ERROR) {
-        return next(new errorList.BadRequestError(MSG_INVALID_USER_DATA));
+        return next(new BadRequestError(MSG_INVALID_USER_DATA));
       }
       return next(err);
     });
@@ -137,7 +142,7 @@ const login = (req, res, next) => {
 
       res.send({ token });
     })
-    .catch(() => next(new errorList.UnauthorizedError(MSG_USER_UNAUTHORIZED)));
+    .catch(() => next(new UnauthorizedError(MSG_USER_UNAUTHORIZED)));
 };
 
 module.exports = {

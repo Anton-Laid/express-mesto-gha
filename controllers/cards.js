@@ -1,5 +1,10 @@
 const Card = require("../modules/card");
-const errorList = require("../errors/index");
+//const errorList = require("../errors/index");
+const NotFoundError = require("../errors/NotFoundError");
+const BadRequestError = require("../errors/BadRequestError");
+const UnauthorizedError = require("../errors/UnauthorizedError");
+const ConflictError = require("../errors/ConflictError");
+const ForbiddenError = require("../errors/ForbiddenError");
 
 const {
   STATUS_CREATED,
@@ -34,7 +39,7 @@ const createCard = (req, res, next) => {
     })
     .catch((error) => {
       if (error.name === VALIDATION_ERROR) {
-        return next(new errorList.BadRequestError(MSG_INCORRECT_DATA));
+        return next(new BadRequestError(MSG_INCORRECT_DATA));
       }
       return next(error);
     });
@@ -46,13 +51,13 @@ const deleteCard = (req, res, next) => {
   Card.findByIdAndDelete(cardId)
     .then((card) => {
       if (!card) {
-        throw new errorList.NotFoundError(MSG_INVALID_CARD_DATA);
+        throw new NotFoundError(MSG_INVALID_CARD_DATA);
       }
       res.status(200).send(card);
     })
     .catch((error) => {
       if (error.name === CAST_ERROR) {
-        next(new errorList.BadRequestError(MSG_FORBIDDEN));
+        next(new BadRequestError(MSG_FORBIDDEN));
       }
       next(error);
     });
@@ -66,13 +71,13 @@ const addLikeCard = (req, res, next) => {
   )
     .then((card) => {
       if (!card) {
-        throw new errorList.NotFoundError(MSG_INVALID_CARD_DATA);
+        throw new NotFoundError(MSG_INVALID_CARD_DATA);
       }
       return res.status(200).send(card);
     })
     .catch((error) => {
       if (error.name === CAST_ERROR) {
-        next(new errorList.BadRequestError(MSG_INCORRECT_DATA));
+        next(new BadRequestError(MSG_INCORRECT_DATA));
       }
       next(error);
     });
@@ -86,13 +91,13 @@ const removeLikeCard = (req, res, next) => {
   )
     .then((card) => {
       if (!card) {
-        throw new errorList.NotFoundError(MSG_INVALID_CARD_DATA);
+        throw new NotFoundError(MSG_INVALID_CARD_DATA);
       }
       return res.status(200).send(card);
     })
     .catch((error) => {
       if (error.name === CAST_ERROR) {
-        return next(new errorList.BadRequestError(MSG_INCORRECT_DATA));
+        return next(new BadRequestError(MSG_INCORRECT_DATA));
       }
       return next(error);
     });
