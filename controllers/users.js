@@ -75,13 +75,13 @@ const createUsers = (req, res, next) => {
       })
     )
     .catch((err) => {
-      if (err.name === VALIDATION_ERROR) {
-        next(new BadRequestError(MSG_INVALID_USER_DATA));
-      } else if (err.code === 11000) {
+      if (err.code === 11000) {
         next(new ConflictError(MSG_REGISTERED_USER));
-      } else {
-        next(err);
       }
+      if (err.code === VALIDATION_ERROR) {
+        next(new BadRequestError(MSG_INCORRECT_DATA));
+      }
+      next(err);
     });
 };
 
