@@ -1,7 +1,6 @@
 const User = require("../modules/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-//const errorList = require("../errors/index");
 const {
   STATUS_CREATED,
   MSG_PROFILE_NOT_FOUND,
@@ -76,13 +75,13 @@ const createUsers = (req, res, next) => {
       })
     )
     .catch((err) => {
-      if (err.code === 11000) {
-        return next(new ConflictError(MSG_REGISTERED_USER));
-      }
       if (err.name === VALIDATION_ERROR) {
-        return next(new BadRequestError(MSG_INVALID_USER_DATA));
+        next(new BadRequestError(MSG_INVALID_USER_DATA));
+      } else if (err.code === 11000) {
+        next(new ConflictError(MSG_REGISTERED_USER));
+      } else {
+        next(err);
       }
-      return next(err);
     });
 };
 
