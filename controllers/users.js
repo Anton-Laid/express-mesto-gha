@@ -55,7 +55,7 @@ const getCurrentUser = (req, res, next) => {
 
 const createUsers = (req, res, next) => {
   const { name, about, avatar, email, password } = req.body;
-
+  console.log(req.body);
   return bcrypt
     .hash(password, 10)
     .then((hash) =>
