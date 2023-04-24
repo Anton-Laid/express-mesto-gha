@@ -70,10 +70,11 @@ const createUsers = (req, res, next) => {
     .then((user) =>
       res.status(STATUS_CREATED).send({
         data: {
+          email: user.email,
+          password: user.password,
           name: user.name,
           about: user.about,
           avatar: user.avatar,
-          _id: user.id,
         },
       })
     )
