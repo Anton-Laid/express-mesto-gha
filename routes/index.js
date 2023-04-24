@@ -6,7 +6,7 @@ const auth = require("../middlewares/auth");
 const { signinValidator } = require("../validators/signin-validator");
 const { signupValidator } = require("../validators/signup-validator");
 
-router.post("/signup", signinValidator, createUsers);
+router.post("/signup", signupValidator, createUsers);
 router.post("/signin", signupValidator, login);
 router.use(auth);
 router.use("/users", userRouter);
