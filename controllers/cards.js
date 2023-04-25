@@ -1,9 +1,6 @@
 const Card = require("../modules/card");
-//const errorList = require("../errors/index");
 const NotFoundError = require("../errors/NotFoundError");
 const BadRequestError = require("../errors/BadRequestError");
-const UnauthorizedError = require("../errors/UnauthorizedError");
-const ConflictError = require("../errors/ConflictError");
 const ForbiddenError = require("../errors/ForbiddenError");
 
 const {
@@ -64,29 +61,6 @@ const deleteCard = (req, res, next) => {
       } else {
         next(new ForbiddenError(MSG_NOT_YOUR_OWN_CARD));
       }
-    })
-    .catch(next);
-};
-
-(req, res, next) => {
-  Card.findById(req.params.cardId)
-    .then((card) => {
-      if (!card) {
-        throw new NotFoundError(MSG_INVALID_CARD_DATA);
-      }
-      if (JSON.stringify(card.owner) !== JSON.stringify(req.user._id)) {
-        throw new ForbiddenError(MSG_NOT_YOUR_OWN_CARD);
-      } else {
-        return Card.deleteOne(card).then(() =>
-          res.status(STATUS_OK).send(MSG_NOT_YOUR_OWN_CARD)
-        );
-      }
-    })
-    .catch((err) => {
-      if (err.name === ErrorTypes.CAST) {
-        throw new BadRequestError(MSG_FORBIDDEN);
-      }
-      next(err);
     })
     .catch(next);
 };
