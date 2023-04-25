@@ -10,6 +10,7 @@ const {
   MSG_INCORRECT_DATA,
   CAST_ERROR,
   STATUS_OK,
+  MSG_NOT_YOUR_OWN_CARD,
 } = require("../utils/constants");
 
 const getCards = (req, res, next) => {
@@ -46,16 +47,22 @@ const createCard = (req, res, next) => {
 const deleteCard = (req, res, next) => {
   const cardId = req.params.cardId;
 
-  Card.findByIdAndDelete(cardId)
+  Card.findById(cardId)
     .then((card) => {
       if (!card) {
         throw new NotFoundError(MSG_INVALID_CARD_DATA);
       }
-      res.status(STATUS_OK).send(card);
+
+      if (card.owner.toString() === req.user._id) {
+        Card.findByIdAndDelete(req.params.id).then((card) =>
+          res.status(STATUS_OK).send(card)
+        );
+        throw new ForbiddenError(MSG_FORBIDDEN);
+      }
     })
     .catch((error) => {
       if (error.name === CAST_ERROR) {
-        next(new ForbiddenError(MSG_FORBIDDEN));
+        next(new BadRequestError(MSG_FORBIDDEN));
       }
       next(error);
     });

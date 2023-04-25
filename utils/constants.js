@@ -23,6 +23,7 @@ const MSG_PAGE_NOT_FOUND = "Страница не найтена";
 const MSG_DEFAULT = "На сервере произошла ошибка";
 const MSG_INVALID_MAIL_FORMAT = "Неверный формат почтового адреса";
 const MSG_AUTHORIZATION_REQUIRED = "Необходима авторизация";
+const MSG_NOT_YOUR_OWN_CARD = "Вы не можете удалить не свою карточку";
 
 module.exports = {
   STATUS_OK,
@@ -46,4 +47,5 @@ module.exports = {
   MSG_DEFAULT,
   MSG_INVALID_MAIL_FORMAT,
   MSG_AUTHORIZATION_REQUIRED,
+  MSG_NOT_YOUR_OWN_CARD,
 };
