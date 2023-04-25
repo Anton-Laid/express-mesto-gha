@@ -7,6 +7,7 @@ const ConflictError = require("../errors/ConflictError");
 const ForbiddenError = require("../errors/ForbiddenError");
 
 const {
+  STATUS_OK,
   STATUS_CREATED,
   VALIDATION_ERROR,
   MSG_INVALID_CARD_DATA,
@@ -16,7 +17,7 @@ const {
 
 const getCards = (req, res, next) => {
   Card.find({})
-    .then((cards) => res.status(200).send(cards))
+    .then((cards) => res.status(STATUS_OK).send(cards))
     .catch((error) => {
       next(error);
     });
@@ -46,25 +47,24 @@ const createCard = (req, res, next) => {
 };
 
 const deleteCard = (req, res, next) => {
-  const cardId = req.params.cardId;
-
-  Card.findByIdAndDelete(cardId)
+  Card.findById(req.params.cardId)
     .then((card) => {
       if (!card) {
-        throw new NotFoundError(MSG_INVALID_CARD_DATA);
+        next(new NotFoundError(MSG_INVALID_CARD_DATA));
       } else if (card.owner.toString() === req.user._id) {
-        Card.findByIdAndRemove(req.params.id).then((card) => {
-          res.status(200).send(card);
+        Card.deleteOne().then(() => {
+          res.status(STATUS_OK).send({ data: card });
         });
       } else {
-        throw new ForbiddenError(MSG_NOT_YOUR_OWN_CARD);
+        next(new ForbiddenError(MSG_NOT_YOUR_OWN_CARD));
       }
     })
-    .catch((error) => {
-      if (error.name === CAST_ERROR) {
-        next(new BadRequestError(MSG_FORBIDDEN));
+    .catch((err) => {
+      if (err.name === CAST_ERROR) {
+        next(new BadRequestError(MSG_INCORRECT_DATA));
+      } else {
+        next(err);
       }
-      next(error);
     });
 };
 
@@ -78,7 +78,7 @@ const addLikeCard = (req, res, next) => {
       if (!card) {
         throw new NotFoundError(MSG_INVALID_CARD_DATA);
       }
-      return res.status(200).send(card);
+      return res.status(STATUS_OK).send(card);
     })
     .catch((error) => {
       if (error.name === CAST_ERROR) {
@@ -98,7 +98,7 @@ const removeLikeCard = (req, res, next) => {
       if (!card) {
         throw new NotFoundError(MSG_INVALID_CARD_DATA);
       }
-      return res.status(200).send(card);
+      return res.status(STATUS_OK).send(card);
     })
     .catch((error) => {
       if (error.name === CAST_ERROR) {
