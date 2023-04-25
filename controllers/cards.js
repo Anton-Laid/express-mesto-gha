@@ -1,9 +1,6 @@
 const Card = require("../modules/card");
-//const errorList = require("../errors/index");
 const NotFoundError = require("../errors/NotFoundError");
 const BadRequestError = require("../errors/BadRequestError");
-const UnauthorizedError = require("../errors/UnauthorizedError");
-const ConflictError = require("../errors/ConflictError");
 const ForbiddenError = require("../errors/ForbiddenError");
 
 const {
@@ -12,11 +9,12 @@ const {
   MSG_INVALID_CARD_DATA,
   MSG_INCORRECT_DATA,
   CAST_ERROR,
+  STATUS_OK,
 } = require("../utils/constants");
 
 const getCards = (req, res, next) => {
   Card.find({})
-    .then((cards) => res.status(200).send(cards))
+    .then((cards) => res.status(STATUS_OK).send(cards))
     .catch((error) => {
       next(error);
     });
@@ -53,11 +51,11 @@ const deleteCard = (req, res, next) => {
       if (!card) {
         throw new NotFoundError(MSG_INVALID_CARD_DATA);
       }
-      res.status(200).send(card);
+      res.status(STATUS_OK).send(card);
     })
     .catch((error) => {
       if (error.name === CAST_ERROR) {
-        next(new BadRequestError(MSG_FORBIDDEN));
+        next(new ForbiddenError(MSG_FORBIDDEN));
       }
       next(error);
     });
@@ -73,7 +71,7 @@ const addLikeCard = (req, res, next) => {
       if (!card) {
         throw new NotFoundError(MSG_INVALID_CARD_DATA);
       }
-      return res.status(200).send(card);
+      return res.status(STATUS_OK).send(card);
     })
     .catch((error) => {
       if (error.name === CAST_ERROR) {
@@ -93,7 +91,7 @@ const removeLikeCard = (req, res, next) => {
       if (!card) {
         throw new NotFoundError(MSG_INVALID_CARD_DATA);
       }
-      return res.status(200).send(card);
+      return res.status(STATUS_OK).send(card);
     })
     .catch((error) => {
       if (error.name === CAST_ERROR) {

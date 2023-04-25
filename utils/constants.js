@@ -11,7 +11,7 @@ const CAST_ERROR = "CastError";
 
 const MSG_PROFILE_NOT_FOUND = "Пользователь не найден";
 const MSG_USER_NOT_FOUND = "Пользователя с таким id не существует";
-const MSG_REGISTERED_USER = "Пользователь уже зарегистрирован";
+const MSG_REGISTERED_USER_EMAIL = "Пользователь уже зарегистрирован";
 const MSG_INVALID_USER_DATA = "Переданы некорректные данные пользователя";
 const MSG_UPDATE_USERS_DATA = "Невозможно обновить данные пользователя";
 const MSG_USER_UNAUTHORIZED = "Неверная почта или пароль";
@@ -32,7 +32,7 @@ module.exports = {
   ERROR_SERVER,
   MSG_PROFILE_NOT_FOUND,
   MSG_USER_NOT_FOUND,
-  MSG_REGISTERED_USER,
+  MSG_REGISTERED_USER_EMAIL,
   MSG_INVALID_USER_DATA,
   MSG_UPDATE_USERS_DATA,
   MSG_USER_UNAUTHORIZED,

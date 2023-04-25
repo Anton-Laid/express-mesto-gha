@@ -9,17 +9,27 @@ const {
   MSG_USER_UNAUTHORIZED,
   CAST_ERROR,
   VALIDATION_ERROR,
+  STATUS_OK,
 } = require("../utils/constants");
 const NotFoundError = require("../errors/NotFoundError");
 const BadRequestError = require("../errors/BadRequestError");
 const UnauthorizedError = require("../errors/UnauthorizedError");
 const ConflictError = require("../errors/ConflictError");
-const ForbiddenError = require("../errors/ForbiddenError");
 
 const getUsers = (req, res, next) => {
   User.find({})
     .then((users) => {
-      res.status(200).send(users);
+      res.status(STATUS_OK).send(
+        users.map((item) => {
+          return {
+            name: item.name,
+            about: item.about,
+            avatar: item.avatar,
+            _id: item.id,
+            email: item.email,
+          };
+        })
+      );
     })
     .catch(next);
 };
@@ -32,7 +42,9 @@ const getUserId = (req, res, next) => {
       if (!user) {
         throw new NotFoundError(MSG_PROFILE_NOT_FOUND);
       }
-      return res.status(200).send(user);
+      return res
+        .status(STATUS_OK)
+        .send({ name: user.name, about: user.about, avatar: user.avatar });
     })
     .catch((error) => {
       if (error.name === CAST_ERROR) {
@@ -47,7 +59,12 @@ const getCurrentUser = (req, res, next) => {
 
   User.findById(users)
     .then((user) => {
-      res.send(user);
+      res.send({
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+        _id: user.id,
+      });
     })
     .catch((error) => next(error));
 };
@@ -76,10 +93,10 @@ const createUsers = (req, res, next) => {
     )
     .catch((err) => {
       if (err.code === 11000) {
-        next(new ConflictError("Пользователь уже зарегистрирован"));
+        next(new ConflictError(MSG_REGISTERED_USER_EMAIL));
       }
       if (err.code === VALIDATION_ERROR) {
-        next(new BadRequestError("Переданы некорректные данные пользователя"));
+        next(new BadRequestError(MSG_INVALID_USER_DATA));
       }
       next(err);
     });
@@ -97,7 +114,7 @@ const updataUser = (req, res, next) => {
       if (!user) {
         throw new NotFoundError(MSG_PROFILE_NOT_FOUND);
       }
-      return res.status(200).send({ name: user.name, about: user.about });
+      return res.status(STATUS_OK).send({ name: user.name, about: user.about });
     })
     .catch((error) => {
       if (error.name === VALIDATION_ERROR) {
@@ -118,7 +135,11 @@ const updateAvatar = (req, res, next) => {
       if (!user) {
         throw new NotFoundError(MSG_PROFILE_NOT_FOUND);
       }
-      return res.send({ data: user });
+      return res.send({
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+      });
     })
     .catch((err) => {
       if (err.name === VALIDATION_ERROR) {

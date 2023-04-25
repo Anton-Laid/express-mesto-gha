@@ -33,6 +33,7 @@ app.use((err, req, res, next) => {
     message: statusCode === ERROR_SERVER ? MSG_DEFAULT : message,
   });
 });
+
 app.listen(PORT, () => {
   console.log(`Start server PORT:${PORT}`);
 });
