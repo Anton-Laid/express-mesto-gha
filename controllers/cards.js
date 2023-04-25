@@ -60,9 +60,7 @@ const deleteCard = (req, res, next) => {
       if (card.owner.valueOf() !== req.params._id) {
         throw new ForbiddenError(MSG_NOT_YOUR_OWN_CARD);
       }
-      Card.findByIdAndDelete(req.params.cardId)
-        .then((deletedCard) => res.status(STATUS_OK).send(deletedCard))
-        .catch(next);
+      card.remove().then(() => res.status(STATUS_OK).send({ data: card }));
     })
     .catch(next);
 };
