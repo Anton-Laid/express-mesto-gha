@@ -58,7 +58,8 @@ const deleteCard = (req, res, next) => {
           res.status(STATUS_OK).send({ data: card });
         });
       } else {
-        next(new ForbiddenError(MSG_NOT_YOUR_OWN_CARD));
+        res.status(403).send(MSG_NOT_YOUR_OWN_CARD);
+        // next(new ForbiddenError(MSG_NOT_YOUR_OWN_CARD));
       }
     })
     .catch((error) => {
