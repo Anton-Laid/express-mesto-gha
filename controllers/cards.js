@@ -13,7 +13,9 @@ const {
   MSG_INCORRECT_DATA,
   CAST_ERROR,
   STATUS_OK,
+  MSG_NOT_YOUR_OWN_CARD,
 } = require("../utils/constants");
+const card = require("../modules/card");
 
 const getCards = (req, res, next) => {
   Card.find({})
@@ -48,26 +50,21 @@ const createCard = (req, res, next) => {
 
 const deleteCard = (req, res, next) => {
   const cardId = req.params.cardId;
+  console.log(req.params);
 
   Card.findById(cardId)
     .then((card) => {
       if (!card) {
-        next(new NotFoundError(MSG_INVALID_CARD_DATA));
-      } else if (card.owner.toString() === req.user._id) {
-        Card.deleteOne({ _id: cardId }).then((card) => {
-          res.status(STATUS_OK).send({ data: card });
-        });
-      } else {
-        res.status(403).send(MSG_NOT_YOUR_OWN_CARD);
-        // next(new ForbiddenError(MSG_NOT_YOUR_OWN_CARD));
+        throw new NotFoundError(MSG_INVALID_CARD_DATA);
       }
+      if (card.owner.valueOf() !== req.params._id) {
+        throw new ForbiddenError(MSG_NOT_YOUR_OWN_CARD);
+      }
+      Card.findByIdAndRemove(req.params.cardId)
+        .then((deletedCard) => res.status(200).send(deletedCard))
+        .catch(next);
     })
-    .catch((error) => {
-      if (error.name === CAST_ERROR) {
-        next(new BadRequestError(MSG_FORBIDDEN));
-      }
-      next(error);
-    });
+    .catch(next);
 };
 
 (req, res, next) => {
