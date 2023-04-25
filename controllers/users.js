@@ -93,10 +93,10 @@ const createUsers = (req, res, next) => {
     )
     .catch((err) => {
       if (err.code === 11000) {
-        next(new ConflictError(MSG_REGISTERED_USER_EMAIL));
+        next(new ConflictError("Пользователь уже зарегистрирован"));
       }
       if (err.code === VALIDATION_ERROR) {
-        next(new BadRequestError(MSG_INVALID_USER_DATA));
+        next(new BadRequestError("Переданы некорректные данные пользователя"));
       }
       next(err);
     });
@@ -112,13 +112,13 @@ const updataUser = (req, res, next) => {
   )
     .then((user) => {
       if (!user) {
-        throw new NotFoundError("Пользователь уже зарегистрирован");
+        throw new NotFoundError(MSG_PROFILE_NOT_FOUND);
       }
       return res.status(STATUS_OK).send({ name: user.name, about: user.about });
     })
     .catch((error) => {
       if (error.name === VALIDATION_ERROR) {
-        next(new BadRequestError("Переданы некорректные данные пользователя"));
+        next(new BadRequestError(MSG_UPDATE_USERS_DATA));
       }
       next(error);
     });
