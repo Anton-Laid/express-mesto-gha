@@ -112,13 +112,13 @@ const updataUser = (req, res, next) => {
   )
     .then((user) => {
       if (!user) {
-        throw new NotFoundError(MSG_PROFILE_NOT_FOUND);
+        throw new NotFoundError("Пользователь уже зарегистрирован");
       }
       return res.status(STATUS_OK).send({ name: user.name, about: user.about });
     })
     .catch((error) => {
       if (error.name === VALIDATION_ERROR) {
-        next(new BadRequestError(MSG_UPDATE_USERS_DATA));
+        next(new BadRequestError("Переданы некорректные данные пользователя"));
       }
       next(error);
     });
