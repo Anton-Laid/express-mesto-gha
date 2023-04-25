@@ -68,10 +68,10 @@ const createUsers = (req, res, next) => {
     )
     .then((user) =>
       res.status(STATUS_CREATED).send({
-        email: user.email,
         name: user.name,
         about: user.about,
         avatar: user.avatar,
+        _id: user.id,
       })
     )
     .catch((err) => {
