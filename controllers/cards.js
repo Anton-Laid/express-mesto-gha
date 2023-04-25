@@ -1,6 +1,9 @@
 const Card = require("../modules/card");
+//const errorList = require("../errors/index");
 const NotFoundError = require("../errors/NotFoundError");
 const BadRequestError = require("../errors/BadRequestError");
+const UnauthorizedError = require("../errors/UnauthorizedError");
+const ConflictError = require("../errors/ConflictError");
 const ForbiddenError = require("../errors/ForbiddenError");
 
 const {
@@ -9,13 +12,11 @@ const {
   MSG_INVALID_CARD_DATA,
   MSG_INCORRECT_DATA,
   CAST_ERROR,
-  STATUS_OK,
-  MSG_NOT_YOUR_OWN_CARD,
 } = require("../utils/constants");
 
 const getCards = (req, res, next) => {
   Card.find({})
-    .then((cards) => res.status(STATUS_OK).send(cards))
+    .then((cards) => res.status(200).send(cards))
     .catch((error) => {
       next(error);
     });
@@ -45,25 +46,20 @@ const createCard = (req, res, next) => {
 };
 
 const deleteCard = (req, res, next) => {
-  Card.findById(req.params.id)
-    .orFail(() => {
-      throw new NotFoundError(MSG_INVALID_CARD_DATA);
-    })
-    .then(({ owner }) => {
-      if (owner.toString() === req.user._id) {
-        Card.findByIdAndRemove(req.params.id).then((card) => {
-          res.status(STATUS_OK).send(card);
-        });
-      } else {
-        throw new ForbiddenError(MSG_FORBIDDEN);
+  const cardId = req.params.cardId;
+
+  Card.findByIdAndDelete(cardId)
+    .then((card) => {
+      if (!card) {
+        throw new NotFoundError(MSG_INVALID_CARD_DATA);
       }
+      res.status(200).send(card);
     })
-    .catch((err) => {
-      if (err.name === "CastError") {
+    .catch((error) => {
+      if (error.name === CAST_ERROR) {
         next(new BadRequestError(MSG_FORBIDDEN));
-      } else {
-        next(err);
       }
+      next(error);
     });
 };
 
@@ -77,7 +73,7 @@ const addLikeCard = (req, res, next) => {
       if (!card) {
         throw new NotFoundError(MSG_INVALID_CARD_DATA);
       }
-      return res.status(STATUS_OK).send(card);
+      return res.status(200).send(card);
     })
     .catch((error) => {
       if (error.name === CAST_ERROR) {
@@ -97,7 +93,7 @@ const removeLikeCard = (req, res, next) => {
       if (!card) {
         throw new NotFoundError(MSG_INVALID_CARD_DATA);
       }
-      return res.status(STATUS_OK).send(card);
+      return res.status(200).send(card);
     })
     .catch((error) => {
       if (error.name === CAST_ERROR) {
