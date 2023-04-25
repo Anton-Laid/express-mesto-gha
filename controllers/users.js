@@ -76,10 +76,10 @@ const createUsers = (req, res, next) => {
     )
     .catch((err) => {
       if (err.code === 11000) {
-        next(new ConflictError(MSG_REGISTERED_USER));
+        next(new ConflictError("Пользователь уже зарегистрирован"));
       }
       if (err.code === VALIDATION_ERROR) {
-        next(new BadRequestError(MSG_INCORRECT_DATA));
+        next(new BadRequestError("Переданы некорректные данные пользователя"));
       }
       next(err);
     });
