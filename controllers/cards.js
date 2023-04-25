@@ -52,8 +52,13 @@ const deleteCard = (req, res, next) => {
     .then((card) => {
       if (!card) {
         throw new NotFoundError(MSG_INVALID_CARD_DATA);
+      } else if (card.owner.toString() === req.user._id) {
+        Card.findByIdAndRemove(req.params.id).then((card) => {
+          res.status(200).send(card);
+        });
+      } else {
+        throw new ForbiddenError(MSG_NOT_YOUR_OWN_CARD);
       }
-      res.status(200).send(card);
     })
     .catch((error) => {
       if (error.name === CAST_ERROR) {
