@@ -50,17 +50,25 @@ const createCard = (req, res, next) => {
 
 const deleteCard = (req, res, next) => {
   const cardId = req.params.cardId;
-  console.log(req.params);
+  const UserId = req.user._id;
+
+  console.log(`${req.user._id} userId`);
 
   Card.findById(cardId)
     .then((card) => {
+      console.log(card);
+      const idOwner = card.owner.toString();
+      console.log(`${idOwner} Owner`);
       if (!card) {
         throw new NotFoundError(MSG_INVALID_CARD_DATA);
       }
-      if (card.owner.valueOf() !== req.params._id) {
-        throw new ForbiddenError(MSG_NOT_YOUR_OWN_CARD);
+      if (UserId === idOwner) {
+        Card.deleteOne({ _id: card.id }).then((card) =>
+          res.status(STATUS_OK).send(card)
+        );
+      } else {
+        next(new ForbiddenError(MSG_NOT_YOUR_OWN_CARD));
       }
-      card.remove().then(() => res.status(STATUS_OK).send({ data: card }));
     })
     .catch(next);
 };
