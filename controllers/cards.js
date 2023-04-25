@@ -52,16 +52,11 @@ const deleteCard = (req, res, next) => {
   const cardId = req.params.cardId;
   const UserId = req.user._id;
 
-  console.log(`${req.user._id} userId`);
-
   Card.findById(cardId)
     .then((card) => {
-      console.log(card);
+      if (!card) next(new NotFoundError(MSG_INVALID_CARD_DATA));
       const idOwner = card.owner.toString();
-      console.log(`${idOwner} Owner`);
-      if (!card) {
-        throw new NotFoundError(MSG_INVALID_CARD_DATA);
-      }
+
       if (UserId === idOwner) {
         Card.deleteOne({ _id: card.id }).then((card) =>
           res.status(STATUS_OK).send(card)
