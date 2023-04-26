@@ -3,7 +3,8 @@ const STATUS_CREATED = 201;
 const ERROR_SERVER = 500;
 
 const OBJECT_ID_PATTERN = /^[0-9a-fA-F]{24}$/;
-const LINK_PATTERN = /https?:\/\/(www\.)?[\w-@:%.\\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([\w-.~:/[?%#@!\]$&'()*+,;=]*)/;
+const LINK_PATTERN =
+  /https?:\/\/(www\.)?[\w-@:%.\\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([\w-.~:/[?%#@!\]$&'()*+,;=]*)/;
 
 const VALIDATION_ERROR = "ValidationError";
 const CAST_ERROR = "CastError";

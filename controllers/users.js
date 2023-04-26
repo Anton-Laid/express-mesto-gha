@@ -1,6 +1,6 @@
+const User = require("../modules/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const User = require("../modules/user");
 const {
   STATUS_CREATED,
   MSG_PROFILE_NOT_FOUND,
@@ -10,7 +10,6 @@ const {
   CAST_ERROR,
   VALIDATION_ERROR,
   STATUS_OK,
-  MSG_UPDATE_USERS_DATA,
 } = require("../utils/constants");
 const NotFoundError = require("../errors/NotFoundError");
 const BadRequestError = require("../errors/BadRequestError");
@@ -21,20 +20,22 @@ const getUsers = (req, res, next) => {
   User.find({})
     .then((users) => {
       res.status(STATUS_OK).send(
-        users.map((item) => ({
-          name: item.name,
-          about: item.about,
-          avatar: item.avatar,
-          _id: item.id,
-          email: item.email,
-        })),
+        users.map((item) => {
+          return {
+            name: item.name,
+            about: item.about,
+            avatar: item.avatar,
+            _id: item.id,
+            email: item.email,
+          };
+        })
       );
     })
     .catch(next);
 };
 
 const getUserId = (req, res, next) => {
-  const { userId } = req.params;
+  const userId = req.params.userId;
 
   User.findById(userId)
     .then((user) => {
@@ -47,7 +48,7 @@ const getUserId = (req, res, next) => {
     })
     .catch((error) => {
       if (error.name === CAST_ERROR) {
-        next(new BadRequestError(MSG_USER_NOT_FOUND));
+        return next(new BadRequestError(MSG_USER_NOT_FOUND));
       }
       next(error);
     });
@@ -70,27 +71,27 @@ const getCurrentUser = (req, res, next) => {
 };
 
 const createUsers = (req, res, next) => {
-  const {
-    name, about, avatar, email, password,
-  } = req.body;
+  const { name, about, avatar, email, password } = req.body;
 
   return bcrypt
     .hash(password, 10)
-    .then((hash) => {
+    .then((hash) =>
       User.create({
         name,
         about,
         avatar,
         email,
         password: hash,
-      });
-    })
-    .then((user) => res.status(STATUS_CREATED).send({
-      name: user.name,
-      about: user.about,
-      avatar: user.avatar,
-      _id: user.id,
-    }))
+      })
+    )
+    .then((user) =>
+      res.status(STATUS_CREATED).send({
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+        _id: user.id,
+      })
+    )
     .catch((err) => {
       if (err.code === 11000) {
         next(new ConflictError("Пользователь уже зарегистрирован"));
@@ -107,8 +108,8 @@ const updataUser = (req, res, next) => {
 
   User.findByIdAndUpdate(
     req.user._id,
-    { name, about },
-    { new: true, runValidators: true },
+    { name: name, about: about },
+    { new: true, runValidators: true }
   )
     .then((user) => {
       if (!user) {
@@ -129,7 +130,7 @@ const updateAvatar = (req, res, next) => {
   User.findByIdAndUpdate(
     req.user._id,
     { avatar },
-    { new: true, runValidators: true, upsert: false },
+    { new: true, runValidators: true, upsert: false }
   )
     .then((user) => {
       if (!user) {

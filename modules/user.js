@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-const validator = require("validator");
 const {
   MSG_USER_UNAUTHORIZED,
   MSG_INVALID_LINK_FORMAT,
   MSG_INVALID_MAIL_FORMAT,
 } = require("../utils/constants");
+const validator = require("validator");
 
 const userSchema = new mongoose.Schema({
   name: {
