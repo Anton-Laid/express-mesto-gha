@@ -12,7 +12,6 @@ const {
   STATUS_OK,
   MSG_NOT_YOUR_OWN_CARD,
 } = require("../utils/constants");
-const card = require("../modules/card");
 
 const getCards = (req, res, next) => {
   Card.find({})
