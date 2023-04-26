@@ -7,11 +7,10 @@
     "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 0 }],
     "linebreak-style": 0,
     "quotes": ["error", "double"],
-    "error": {
-      "ObjectExpression": { "consistent": true, "multiline": true },
-      "ObjectPattern": { "consistent": true, "multiline": true },
-      "ImportDeclaration": "never",
-      "ExportDeclaration": { "multiline": true, "minProperties": 3 }
-    }
+    "no-unused-vars": "off",
+    "no-shadow": "off",
+    "consistent-return": "off",
+    "no-console": "off",
+    "func-names": "off"
   }
 }

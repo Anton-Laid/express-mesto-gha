@@ -46,7 +46,7 @@ const createCard = (req, res, next) => {
 };
 
 const deleteCard = (req, res, next) => {
-  const cardId = req.params.cardId;
+  const { cardId } = req.params;
   const UserId = req.user._id;
 
   Card.findById(cardId)
@@ -55,9 +55,7 @@ const deleteCard = (req, res, next) => {
       const idOwner = card.owner.toString();
 
       if (UserId === idOwner) {
-        Card.deleteOne({ _id: card.id }).then((card) =>
-          res.status(STATUS_OK).send(card)
-        );
+        Card.deleteOne({ _id: card.id }).then((card) => res.status(STATUS_OK).send(card));
       } else {
         next(new ForbiddenError(MSG_NOT_YOUR_OWN_CARD));
       }
@@ -69,7 +67,7 @@ const addLikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: req.user._id } },
-    { new: true }
+    { new: true },
   )
     .then((card) => {
       if (!card) {
@@ -89,7 +87,7 @@ const removeLikeCard = (req, res, next) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: req.user._id } },
-    { new: true }
+    { new: true },
   )
     .then((card) => {
       if (!card) {
