@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const { errors } = require("celebrate");
 const route = require("./routes/index");
 const NotFoundError = require("./errors/NotFoundError");
 const {
@@ -8,7 +9,6 @@ const {
   MSG_PAGE_NOT_FOUND,
   MSG_DEFAULT,
 } = require("./utils/constants");
-const { errors } = require("celebrate");
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -34,6 +34,4 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Start server PORT:${PORT}`);
-});
+app.listen(PORT);
